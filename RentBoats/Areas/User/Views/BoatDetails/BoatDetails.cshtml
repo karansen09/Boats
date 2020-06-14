@@ -1,0 +1,737 @@
+﻿
+@{
+    ViewData["Title"] = "BoatDetails";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+<script src="../../vendor/jquery/jquery.min.js"></script>
+<link href="~/css/jquery-ui.css" rel="stylesheet" />
+@*<link href="~/css/ui.jqgrid.min.css" rel="stylesheet" />*@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.13.3/css/ui.jqgrid.min.css">
+
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/free-jqgrid/4.13.3/js/jquery.jqgrid.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/datepicker/1.0.9/datepicker.min.js"></script>
+
+<style>    
+    div.dataTables_wrapper div.dataTables_processing {
+        top: 0;
+    }
+
+    .tabsChange:hover {
+        background-color: #ffd800;
+    }
+
+    .ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active {
+        border: 1px solid #ffaf0f;
+        background: #ffd800;
+        font-weight: bold;
+        color: #000000;
+    }
+
+    .ui-widget-header {
+        border: 1px solid #808080;
+        background: gray;
+        color: #fff;
+        font-weight: bold;
+    }
+
+    .ui-widget-content {
+        background: #fff;
+        color: black;
+    }
+
+    .modal-backdrop {
+        background-color: rgba(0, 0, 0, 0.61);
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        display: none;
+        z-index: 1040 !important;
+    }
+
+    .modal {
+        width: 250px;
+        position: absolute;
+        top: 25%;
+        background-color: #FFF;
+        border-radius: 6px;
+        display: none;
+        z-index: 99999 !important;
+    }
+
+    .modal-header {
+        background-color: #333;
+        color: #FFF;
+        border-top-right-radius: 5px;
+        border-top-left-radius: 5px;
+    }
+
+        .modal-header h3 {
+            margin: 0;
+            padding: 0 10px 0 10px;
+            line-height: 40px;
+        }
+
+            .modal-header h3 .close-modal {
+                float: right;
+                text-decoration: none;
+                color: #FFF;
+            }
+
+    .modal-footer {
+        background-color: #F1F1F1;
+        padding: 0 10px 0 10px;
+        line-height: 40px;
+        text-align: right;
+        border-bottom-right-radius: 5px;
+        border-bottom-left-radius: 5px;
+        border-top: solid 1px #CCC;
+    }
+
+    .modal-body {
+        padding: 0 10px 0 10px;
+    }
+
+    select.soflow, select.soflow-color {
+        -webkit-border-radius: 2px;
+        -webkit-box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+        -webkit-padding-end: 20px;
+        -webkit-padding-start: 2px;
+        -webkit-user-select: none;
+        background-image: -webkit-linear-gradient(#FAFAFA, #F4F4F4 40%, #E5E5E5);
+        background-position: 97% center;
+        background-repeat: no-repeat;
+        border: 1px solid #AAA;
+        color: #555;
+        font-size: inherit;
+        margin: 20px;
+        overflow: hidden;
+        padding: 1px 5px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        width: 200px;
+    }
+
+    .ui-jqgrid .ui-state-hover {
+        background: #b0b0b0 !important;
+    }
+
+    .ui-state-disabled {
+        opacity: 0.7 !important;
+    }
+
+    .ui-jqgrid tr.jqgrow td {
+        text-overflow: ellipsis;
+        -o-text-overflow: ellipsis;
+    }
+
+    .ui-jqgrid tr.jqgrow.ui-state-highlight td {
+        word-wrap: break-word; /* IE 5.5+ and CSS3 */
+        white-space: pre-wrap; /* CSS3 */
+        white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
+        white-space: -pre-wrap; /* Opera 4-6 */
+        white-space: -o-pre-wrap; /* Opera 7 */
+        overflow: hidden;
+        height: auto;
+        vertical-align: middle;
+        padding-top: 2px;
+        padding-bottom: 2px;
+    }
+
+    th.ui-th-column div {
+        word-wrap: break-word; /* IE 5.5+ and CSS3 */
+        white-space: pre-wrap; /* CSS3 */
+        white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
+        white-space: -pre-wrap; /* Opera 4-6 */
+        white-space: -o-pre-wrap; /* Opera 7 */
+        overflow: hidden;
+        height: auto !important;
+        vertical-align: middle;
+        text-align: left;
+    }
+
+    .ui-jqgrid-btable .ui-widget-content.ui-state-hover {
+        background-image: none;
+        background-color: #EFF4F7;
+        opacity: 1;
+    }
+
+    fieldset {
+        border: 1px solid #ddd;
+        padding: 0 0em 0.0em 0.0em;
+        margin: 0 0 1.5em 0;
+        border-radius: 8px;
+        margin: 0 5px;
+        height: 100%;
+    }
+
+    legend {
+        font-size: 1.2em;
+        font-weight: bold;
+    }
+
+    .btnfiltter {
+        border-radius: 0px;
+        background-color: #1BBF4A;
+        border: none;
+        color: #FFFFFF;
+        text-align: center;
+        font-size: 14px;
+        padding: 5px;
+        width: 100px;
+        transition: all 0.5s;
+        cursor: pointer;
+        margin: 5px;
+        margin-top: 1em;
+    }
+
+    select.soflow, select.soflow-color {
+        -webkit-border-radius: 2px;
+        -webkit-box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+        -webkit-padding-end: 20px;
+        -webkit-padding-start: 2px;
+        -webkit-user-select: none;
+        background-image: -webkit-linear-gradient(#FAFAFA, #F4F4F4 40%, #E5E5E5);
+        background-position: 97% center;
+        background-repeat: no-repeat;
+        border: 1px solid #AAA;
+        color: #555;
+        font-size: inherit;
+        margin: 20px;
+        overflow: hidden;
+        padding: 1px 5px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        width: 200px;
+    }
+
+    .ui-dialog .ui-dialog-buttonpane {
+        text-align: left;
+        border-width: 1px 0 0 0;
+        background-image: none;
+        margin-top: .5em;
+        padding: .3em 1em .5em .4em;
+        background-color: #ffffff;
+    }
+
+        .ui-dialog .ui-dialog-buttonpane button {
+            margin: .5em .4em .5em 0;
+            cursor: pointer;
+            color: black;
+            background-color: #ffffff;
+        }
+
+        .ui-dialog .ui-dialog-buttonpane .ui-dialog-buttonset {
+            float: right;
+            background-color: #ffffff;
+        }
+
+    .ui-widget-header {
+        border: 1px solid #0094ff;
+        background: #fff;
+        color: #fff;
+        font-weight: bold;
+    }
+
+    .ui-jqdialog-title {
+        color: #000000;
+    }
+
+    .ui-jqdialog .ui-jqdialog-titlebar-ltr .ui-jqdialog-titlebar-close {
+        background: #808080;
+        right: .3em;
+    }
+</style>
+
+
+
+<script>
+    $(function () {
+        
+        LoadBoats();
+    })
+    function LoadBoats() {
+        var grid_selector = "#dataGrid";
+        var pager_selector = "#pagingGrid";
+        var data = [];
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            contentType: 'application/json,charset=utf-8',
+            url: '/User/BoatDetails/GetBoatDetails',
+            success: function (data) {
+                var fulldata = [];
+                $.each(data, function (key, value) {
+                    fulldata.push(value)
+                });
+                data = fulldata;
+                jQuery('#dataGrid').jqGrid('GridUnload');
+                $("#dataGrid").jqGrid({
+                    data: data,
+                    datatype: "local",
+                    loadonce: true,
+                    sortable: true,
+                    height: 500,
+                    width: 1000,
+                    colNames: ['Id', 'UserId', 'RentId', 'Boat Name', 'Boat Number', 'Base Charges', 'Hourly Rate', 'Is Available For Rent',
+                        'Customer Name', 'Rent out date', 'Create Date', 'Boat Image'],
+                    //colNames: ['Id', 'UserId', 'BoatName', 'BoatNumber', 'BaseCharges', 'HourlyRate', 'BoatImage', 'IsAvailableForRent',
+                    //    'CreateDate'],
+                    colModel: [
+                        { name: 'Id', search: false, width: 120, sortable: false, hidden: true },
+                        { name: 'UserId', width: 10, sortable: false, hidden: true },
+                        { name: 'RentId', width: 10, sortable: false, editable: true, hidden: true },
+                        {
+                            name: 'BoatName',
+                            index: 'BoatName',
+                            width: 100,
+                           
+                            search: true,
+                            searchoptions: { sopt: ['cn', 'eq', 'ne'] }
+
+                        },
+                        {
+                            name: 'BoatNumber',
+                            index: 'BoatNumber',
+                            width: 100,
+                            
+                            editrules: { required: true },
+                            search: true,
+                            searchoptions: { sopt: ['cn', 'eq', 'ne'] }
+
+                        },
+                        { name: 'BaseCharges', width: 120, sortable: true, editable: true, search: false, editrules: { required: true }, searchoptions: { sopt: ['cn', 'eq', 'ne'] } },
+                        { name: 'HourlyRate', width: 120, sortable: true, editable: true, search: false, editrules: { required: true }, searchoptions: { sopt: ['cn', 'eq', 'ne'] } },
+
+                        { name: 'IsAvailableForRent', width: 100, search: false, formatter: isonrent },
+                        { name: 'CustomerName', width: 100, sortable: true, editable: true, search: true, editrules: { required: true }, searchoptions: { sopt: ['cn', 'eq', 'ne'] } },
+                        {
+                            name: 'RentOutDate', width: 50, sorttype: "date", sortable: false, search: false, formatter: 'date',
+                            formatoptions: {
+                                newformat: 'd/m/Y'
+                            }
+                        },
+                        {
+                            name: 'CreateDate', width: 50, sorttype: "date", sortable: false, search: false, formatter: 'date',
+                            formatoptions: {
+                                newformat: 'd/m/Y'
+                            }
+                        },
+                        { name: 'BoatImage', width: 120, search: false, formatter: myimage },
+
+                    ],
+                    loadonce: true,
+                    rowNum: 10000,
+                    rowTotal: 2000,
+                    rownumWidth: 40,
+                    gridview: true,
+                    pager: pager_selector,
+                    altRows: false,
+                    multiselect: true,
+                    viewrecords: true,
+                    cloneToTop: false,
+                    hoverrows: true,
+                    caption: "",
+                    pgbuttons: false,
+                    pgtext: null,
+                    viewrecords: false,
+                    loadComplete: function (data) {
+                        var table = this;
+
+                    },
+                    onSelectRow: function (rowid, e, rowdata) {
+                        var selRow = jQuery("#dataGrid").jqGrid('getGridParam', 'selarrrow');
+                        if (selRow.length > 1) {
+                            $('.ui-icon-pencil').css({
+                                'display': 'none'
+                            });
+                            $('.ui-icon-document').css({
+                                'display': 'none'
+                            });
+                            $('.ui-icon-tag').css({
+                                'display': 'none'
+                            });
+                        }
+                        else {
+                            $('.ui-icon-pencil').css({
+                                'display': 'block'
+                            });
+                            $('.ui-icon-document').css({
+                                'display': 'block'
+                            });
+                            $('.ui-icon-tag').css({
+                                'display': 'block'
+                            });
+                        }
+
+                        var s_row = $("#dataGrid").jqGrid('getGridParam', 'selarrrow');
+                        var a_row = $('#dataGrid').jqGrid('getDataIDs');
+                        if (s_row.sort(function (a, b) { return a - b }).join() ==
+                            a_row.sort(function (a, b) { return a - b }).join()) {
+                            $('#cb_dataGrid').prop('checked', true);
+                        }
+                    },
+                    onSelectAll: function (aRowids, status) {
+                        let totalselected = status === false ? 0 : aRowids.length;
+                        if (totalselected > 1) {
+                            $('.ui-icon-pencil').css({
+                                'display': 'none'
+                            });
+                            $('.ui-icon-document').css({
+                                'display': 'none'
+                            });
+                            $('.ui-icon-tag').css({
+                                'display': 'none'
+                            });
+                        } else {
+                            $('.ui-icon-pencil').css({
+                                'display': 'block'
+                            });
+                            $('.ui-icon-document').css({
+                                'display': 'block'
+                            });
+                            $('.ui-icon-tag').css({
+                                'display': 'block'
+                            });
+                        }
+                    }
+                });
+                $("#dataGrid").jqGrid('navGrid', '#pagingGrid',
+                    { add: false, edit: false, del: false, search: true, view: false, refresh: false },
+                    {/*edit options*/ }, {/*add options*/ }, {/*del options*/ }, {/*search options*/ },
+                    { width: 600 });
+
+                $("#dataGrid").jqGrid('navButtonAdd', "#pagingGrid", {
+                    caption: "",
+                    title: "Reload Grid",
+                    buttonicon: "ui-icon-refresh",
+                    onClickButton: function () {
+                        LoadBoats();
+                    }
+                });
+                $("#dataGrid").navButtonAdd('#pagingGrid', {
+                    caption: "",
+                    buttonicon: "ui-icon-document",
+                    onClickButton: showRow,
+                    position: "last",
+                    width: 500,
+                    title: "View Record",
+                    cursor: "pointer"
+                });
+
+                $("#dataGrid").navButtonAdd('#pagingGrid', {
+                    caption: "",
+                    buttonicon: "ui-icon-plus",
+                    onClickButton: function () {
+                        window.location.href = '../../User/Register/Register'
+                    },
+                    position: "last",
+                    width: 500,
+                    title: "Add Record",
+                    cursor: "pointer"
+                });
+                $("#dataGrid").navButtonAdd('#pagingGrid', {
+                    caption: "",
+                    buttonicon: "ui-icon-trash",
+                    onClickButton: deleteRow,
+                    position: "last",
+                    title: "Delete Records",
+                    cursor: "pointer"
+                });
+
+                $("#dataGrid").navButtonAdd('#pagingGrid', {
+                    caption: "",
+                    buttonicon: "ui-icon-tag",
+                    onClickButton: RentBoat,
+                    position: "last",
+                    width: 500,
+                    title: "Rent Selected Boat",
+                    cursor: "pointer"
+                });
+                //$('#dataGrid').jqGrid('setFrozenColumns');
+                $('.ui-icon-tag').css({
+                    'background-image': 'url("../../css/images/ui-icons_ffffff_256x240.png")',
+                    'color': 'white'
+                })
+                $('.ui-icon-plus').css({
+                    'background-image': 'url("../../css/images/ui-icons_ffffff_256x240.png")',
+                    'color': 'white'
+                })
+                $('.ui-icon-pencil').css({
+                    'background-image': 'url("../../css/images/ui-icons_ffffff_256x240.png")',
+                    'color': 'white'
+                });
+                $('.ui-icon-document').css({
+                    'background-image': 'url("../../css/images/ui-icons_ffffff_256x240.png")',
+                    'color': 'white'
+                });
+                $('.ui-icon-refresh').css({
+                    'background-image': 'url("../../css/images/ui-icons_ffffff_256x240.png")',
+                    'color': 'white'
+                });
+                $('.ui-icon-triangle-1-w').css({
+                    'background-image': 'url("../../css/images/ui-icons_cccccc_256x240.png")',
+                    'color': 'white'
+                });
+                $('.ui-icon-triangle-1-e').css({
+                    'background-image': 'url(../../css/images/ui-icons_ffffff_256x240.png)',
+                    'color': 'white'
+                });
+                $('.ui-icon-cancel').css({
+                    'background-image': 'url("../../css/images/ui-icons_ffffff_256x240.png")',
+                    'color': 'white'
+                });
+                $('.ui-icon-search').css({
+                    'background-image': 'url("../../css/images/ui-icons_ffffff_256x240.png")',
+                    'color': 'white'
+                });
+                $('.ui-icon-trash').css({
+                    'background-image': 'url("../../css/images/ui-icons_ffffff_256x240.png")',
+                    'color': 'white'
+                });
+
+                $('#edit_dataGrid').prop('title', 'Edit Details');
+            }
+
+
+        });
+
+        function extractContent(s) {
+            var span = document.createElement('span');
+            span.innerHTML = s;
+            return span.textContent || span.innerText;
+        };
+
+        function showRow() {
+            // Get the currently selected row
+            var row = $("#dataGrid").jqGrid('getGridParam', 'selrow');
+            let rowid = $('#dataGrid').getGridParam('selrow');
+            let Id = $(this).jqGrid("getCell", rowid, "Id");
+
+            if (row != null) $("#dataGrid").jqGrid('viewGridRow', row, {
+                width: 500,
+                recreateForm: true,
+                closeAfterEdit: true,
+                reloadAfterSubmit: true,
+                beforeShowForm: function (form) {
+
+                    $("#pData").hide();
+                    $("#nData").hide();
+
+
+                    $("#date").datepicker({
+                        changeMonth: true,
+                        changeYear: true
+                    });
+                },
+            });
+            else alert("Please select row");
+        }
+
+        function myimage(cellValue, options, rowdata, action) {
+            var imagepath = rowdata.BoatImagePath;
+            imagepath = imagepath.replace("wwwroot", "../../");
+            return "<img src='" + imagepath + "' alt='my image' style='height:50px;widht:50px;' />";
+
+        }
+
+        function isonrent(cellValue, options, rowdata, action) {
+            var isavail = rowdata.IsAvailableForRent
+            if (isavail == 'false' || isavail == false) {
+                
+                return "<button class='btn btn-danger'>Not Available</button>";
+            }
+            else {
+                return "<button class='btn btn-success'>Available</button>";
+            }
+        }
+
+        function deleteRow() {
+            // Get the currently selected row
+            var row = $("#dataGrid").jqGrid('getGridParam', 'selrow');
+            let rowid = $('#dataGrid').getGridParam('selrow');
+            var Id = $(this).jqGrid("getCell", rowid, "Id");
+            var RentId = $(this).jqGrid("getCell", rowid, "RentId");
+            //let id = $(this).jqGrid("getCell", rowid, "Id");
+
+            var $grid = $("#dataGrid"), selIds = $grid.jqGrid("getGridParam", "selarrrow"), i, n,
+                cellValues = [], cellIds = [];
+            $.each(selIds, function (i, el) {
+                if ($.inArray($grid.jqGrid("getCell", selIds[i], "Id"), cellValues) === -1)
+                    if ($("#jqg_dataGrid_" + selIds[i]).is(":checked")) {
+                        cellValues.push($grid.jqGrid("getCell", selIds[i], "RentId"));
+                        cellIds.push($grid.jqGrid("getCell", selIds[i], "Id"));
+                    }
+            });
+            if (cellIds.length <= 0) {
+                alert('Select entity to delete');
+                return;
+            }
+            var istodelete = '';
+            $.each(cellValues, function (id, key) {
+                if (key != '') {
+                    istodelete += 'No';
+                    return;
+                }
+            })
+
+            if (istodelete != '') {
+                alert('Cannot Remove Currently Running Boat.Please de - select currently running boat.')
+                return;
+            }
+            id = cellIds.join(",");
+            // A pop-up dialog will appear to confirm the selected action
+            if (row != null) $("#dataGrid").jqGrid('delGridRow', id, {
+                url: '/User/BoatDetails/RemoveBoat',
+                recreateForm: true,
+                beforeShowForm: function (form) {
+                    //change title
+                    $(".delmsg").replaceWith('<span style="white-space: pre;">' + 'Remove selected record?' + '</span>');
+
+                    //hide arrows
+                    $('#pData').hide();
+                    $('#nData').hide();
+                },
+                reloadAfterSubmit: false,
+                closeAfterDelete: true,
+                afterSubmit: function (response, postdata) {
+                    var result = eval('(' + response.responseText + ')');
+                    var errors = "";
+
+                    $("#dialog").text('Entry has been deleted successfully');
+                    $("#dialog").dialog({
+                        title: 'Success',
+                        modal: true,
+                        buttons: {
+                            "Ok": function () {
+                                LoadBoats();
+                                $(this).dialog("close");
+                            }
+                        }
+                    });
+
+
+                }
+            });
+            else alert("Please select row");
+        }
+
+        function RentBoat() {
+            // Get the currently selected row
+            var row = $("#dataGrid").jqGrid('getGridParam', 'selrow');
+            var rowid = $('#dataGrid').getGridParam('selrow');
+            var Id = $(this).jqGrid("getCell", rowid, "Id");
+            var checkavail = $(this).jqGrid("getCell", rowid, "IsAvailableForRent");
+            var IsAvailable = extractContent(checkavail);
+            var RentId = $(this).jqGrid("getCell", rowid, "RentId");
+
+            if (row != null) $("#dataGrid").jqGrid('editGridRow', row, {
+                url: '/User/BoatDetails/GetBoatDetailsRent',
+                serializeEditData: function (data) {
+                    data.id = Id;
+
+                    return $.param(data);
+                },
+                width: 600,
+                height: 500,
+                recreateForm: true,
+                closeAfterEdit: true,
+                reloadAfterSubmit: true,
+                beforeShowForm: function (form) {
+                                      
+                    $('.EditButton-ltr').html('');
+                    $('.navButton-ltr').html('');
+
+                    if (IsAvailable == 'Available') {
+                        $('.ui-jqdialog-title').html('');
+                        $('.ui-jqdialog-title').html('Rent This Boat')
+                        $('.EditButton-ltr').append('<a id="sData" class="fm-button ui-state-default ui-corner-all fm-button-icon-left" role="button" tabindex="0"><span class="fm-button-text">Rent</span></a>&nbsp;<a id="cData" class="fm-button ui-state-default ui-corner-all fm-button-icon-left" role="button" tabindex="0"><span class="fm-button-text">Cancel</span></a>')
+                    }
+                    else {
+                        $('.ui-jqdialog-title').html('');
+                        $('.ui-jqdialog-title').html('Make Payment for this Boat')
+                        $('#BaseCharges').attr('disabled', true);
+                        $('#HourlyRate').attr('disabled', true);
+                        $('#CustomerName').attr('disabled', true);
+                        $('.EditButton-ltr').append('<a id="sData" class="fm-button ui-state-default ui-corner-all fm-button-icon-left" role="button" tabindex="0"><span class="fm-button-text">Bill Charges</span></a>&nbsp;<a id="cData" class="fm-button ui-state-default ui-corner-all fm-button-icon-left" role="button" tabindex="0"><span class="fm-button-text">Cancel</span></a>')
+                    }
+                    
+                },
+                afterSubmit: function (response, postdata) {
+                    debugger;
+                    var result = eval('(' + response.responseText + ')');
+                    var errors = "";
+
+                    if (result.success == false) {
+                        for (var i = 0; i < result.message.length; i++) {
+                            errors += result.message[i] + "<br/>";
+                        }
+                    } else {
+                        if (postdata.RentId == '') {
+                            $("#dialog").text('Thank you..!');
+                        }
+                        else {
+                            $("#dialog").text('Thank you..! Your Total Amount is: ' + result);
+                        }
+                        
+                        $("#dialog").dialog({
+                            title: 'Success',
+                            modal: true,
+                            buttons: {
+                                "Ok": function () {
+                                    LoadBoats();
+                                    $(this).dialog("close");
+                                }
+                            }
+                        });
+                    }
+                    return [result.success, errors, null];
+                },
+                errorTextFormat: function (jqXHR, textStatus, errorThrown) {
+                    var eresult = '';
+                    
+                    if (jqXHR.statusText = 'error') {
+                        eresult = 'Validation fails!! Please check .';
+                    }
+                    if (jqXHR.statusText = '') {
+                        eresult = 'Validation fails!! Please check.';
+                    }
+                    return '<span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"></span>' +
+                        "<strong>" + eresult + "<strong></br>'";
+                }
+            });
+            else alert("Please select row");
+        }
+    }
+</script>
+
+<div class="container-fluid">
+    <h1 class="h3 mb-4 text-gray-800">Boat Info</h1>
+
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+        <!-- Circle Buttons -->
+        <div class="tablebodyOP">
+            <div class="container" style="overflow:auto; height:600px;">
+                <div style="height:100%;">
+                    <table id="dataGrid"></table>
+                    <div id="pagingGrid"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="dialog" title="Feature not supported" style="display:none">
+            <p>That feature is not supported.</p>
+        </div>
+
+      
+        <!-- Brand Buttons -->
+
+
+    </div>
+</div>
+
+

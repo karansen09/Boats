@@ -1,0 +1,81 @@
+﻿@model RentBoats.Model.User.AddBoat.AddBoatDetails
+@{
+    ViewData["Title"] = "Register";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+
+
+<div class="container-fluid">
+
+    <!-- Page Heading -->
+    <h1 class="h3 mb-4 text-gray-800">Registration</h1>
+
+    <div class="row">
+
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+            <!-- Circle Buttons -->
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Enter Your Boat Details Here</h6>
+                </div>
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="card-body">
+                    <form class="user" asp-action="Register" asp-area="User" asp-controller="Register" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <div class="col-lg-12 col-sm-12 col-xs-12">
+                                <input type="text" asp-for="BoatName" class="form-control form-control-user" placeholder="Boat Name" />
+                                <span asp-validation-for="BoatName" class="text-danger"></span>
+                            </div>
+
+                        </div>
+                        <div class="form-group">
+                            <div class="col-lg-12 col-sm-12 col-xs-12">
+                                <input type="text" asp-for="BaseCharges" class="form-control form-control-user" placeholder="Base charges">
+                                <span asp-validation-for="BaseCharges" class="text-danger"></span>
+                            </div>
+
+                        </div>
+                        <div class="form-group">
+                            <div class="col-lg-12 col-sm-12 col-xs-12">
+                                <input type="text" asp-for="HourlyRate" class="form-control form-control-user" placeholder="Hourly Rate">
+                                <span asp-validation-for="HourlyRate" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <input type="file" asp-for="BoatImage">
+                            <span asp-validation-for="BoatImage" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <input type="checkbox" asp-for="IsAvailableForRent" /> Check to make this boat available for rent.
+                        </div>
+                        <button class="btn btn-success btn-icon-split">
+                            <span class="icon text-white-50">
+                                <i class="fas fa-check"></i>
+                            </span>
+                            <span class="text"> Add A Boat</span>
+                        </button>
+
+
+                    </form>
+                    <div class="clearfix"></div>
+                    @if (ViewData["result"] != null)
+                    {
+                        <span class="text-success">New Boat Added Successfully</span>
+                        <div class="clearfix"></div>
+                        <span class="text-success">Your boat id is @ViewData["result"]</span>
+                    }
+
+                </div>
+            </div>
+
+            <!-- Brand Buttons -->
+            
+
+        </div>
+
+        
+
+    </div>
+
+</div>
